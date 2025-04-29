@@ -1,0 +1,42 @@
+# Use postgres/example user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    container_name: db
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    # or set shared memory limit when deploy via swarm stack
+    #volumes:
+    #  - type: tmpfs
+    #    target: /dev/shm
+    #    tmpfs:
+    #      size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: mypw
+      POSTGRES_USER: myuser
+    ports:
+      - 8082:5432
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  webserver:
+    build:
+      context: ./webserver  # Relative to the location of this compose.yaml
+      dockerfile: Dockerfile
+      args:
+        GOBUILD_IMAGE: golang:1.21  # Replace with your desired base image
+    container_name: webserver
+    ports:
+      - "8081:8080"  # Change as needed
+    depends_on:
+      - db
+
