@@ -58,6 +58,19 @@ func main() {
 	}
 
 	fmt.Println(authors)
+
+	author := mydb.CreateAuthorParams{
+		Name: "John",
+		Bio: sql.NullString{
+			String: "dummy bio",
+			Valid:  true,
+		},
+	}
+	a, err := queries.CreateAuthor(ctx, author)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("author added", a)
 	//fmt.Println(authors[0].Bio.String)
 
 }
