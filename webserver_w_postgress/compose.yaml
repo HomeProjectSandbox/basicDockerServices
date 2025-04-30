@@ -20,6 +20,11 @@ services:
       POSTGRES_USER: myuser
     ports:
       - 8082:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   adminer:
     image: adminer
@@ -33,10 +38,11 @@ services:
       context: ./webserver  # Relative to the location of this compose.yaml
       dockerfile: Dockerfile
       args:
-        GOBUILD_IMAGE: golang:1.21  # Replace with your desired base image
+        GOBUILD_IMAGE: golang:1.24.2  # Replace with your desired base image
     container_name: webserver
     ports:
       - "8081:8080"  # Change as needed
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
