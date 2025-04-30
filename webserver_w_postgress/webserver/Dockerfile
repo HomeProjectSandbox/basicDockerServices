@@ -13,6 +13,9 @@ FROM ubuntu:latest
 
 WORKDIR /app
 
+COPY --from=builder /go/src/workdir/database/migrations database/migrations
+
+
 COPY --from=builder /go/src/workdir/webserver webserver
 
 CMD ["./webserver"]

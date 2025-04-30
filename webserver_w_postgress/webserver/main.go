@@ -15,8 +15,8 @@ import (
 )
 
 func main() {
-	//connStr := "postgres://myuser:mypw@db:5432/myuser?sslmode=disable"
-	connStr := "postgres://myuser:mypw@localhost:8082/myuser?sslmode=disable"
+	connStr := "postgres://myuser:mypw@db:5432/myuser?sslmode=disable"
+	//connStr := "postgres://myuser:mypw@localhost:8082/myuser?sslmode=disable"
 
 	m, err := migrate.New(
 		"file://database/migrations",
