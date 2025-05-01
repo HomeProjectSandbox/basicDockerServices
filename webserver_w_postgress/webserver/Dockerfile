@@ -15,7 +15,11 @@ WORKDIR /app
 
 COPY --from=builder /go/src/workdir/database/migrations database/migrations
 
+COPY --from=builder /go/src/workdir/static static
+
 
 COPY --from=builder /go/src/workdir/webserver webserver
+
+EXPOSE 8080
 
 CMD ["./webserver"]

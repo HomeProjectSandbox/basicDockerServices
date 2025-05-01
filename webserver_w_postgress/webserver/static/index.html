@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Author</title>
+    <script>
+        async function addAuthor(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const bio = document.getElementById('bio').value;
+
+            const response = await fetch('/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, bio }),
+            });
+
+            if (response.ok) {
+                const author = await response.json();
+                alert(`Author added: ${author.name}`);
+            } else {
+                alert('Failed to add author');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Add Author</h1>
+    <form onsubmit="addAuthor(event)">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="bio">Bio:</label>
+        <textarea id="bio" name="bio" required></textarea>
+        <br>
+        <button type="submit">Send</button>
+    </form>
+</body>
+</html>
