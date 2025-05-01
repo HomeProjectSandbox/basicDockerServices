@@ -1,0 +1,5 @@
+app:
+  dbName: "db"
+  dbPort: 5432
+  dbUser: myuser
+  dbPw: mypw

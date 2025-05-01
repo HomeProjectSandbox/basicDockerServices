@@ -45,4 +45,5 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
+    volumes:
+      - ./webserver/config:/config  # Mount the local ./config directory to /config in the container

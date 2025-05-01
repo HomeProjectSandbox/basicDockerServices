@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/HomeProjectSandbox/basicDockerServices/webserverpostgress/config"
 	"github.com/HomeProjectSandbox/basicDockerServices/webserverpostgress/mydb"
 	_ "github.com/lib/pq" // register driver to database/sql package
 
@@ -26,7 +27,23 @@ type AddAuthorRequest struct {
 }
 
 func main() {
-	connStr := "postgres://myuser:mypw@db:5432/myuser?sslmode=disable"
+	c := config.GetConfig("/config", "config") //remove this if local development... (not in container)
+
+	fmt.Println(c)
+	fmt.Println(c.App.DbName)
+	fmt.Println(c.App.DbUser)
+
+	//TODO: need to use the config
+	//connStr := "postgres://myuser:mypw@db:5432/myuser?sslmode=disable"
+	// Construct the connection string using the loaded configuration
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=disable",
+		c.App.DbUser, // Username from config
+		c.App.DbPw,   // Password from config
+		c.App.DbName, // Host from config
+		c.App.DbPort, // Port from config
+		c.App.DbUser,
+	)
+
 	//connStr := "postgres://myuser:mypw@localhost:8082/myuser?sslmode=disable"
 
 	m, err := migrate.New(
