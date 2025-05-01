@@ -1,13 +1,19 @@
-ARG GOBUILD_IMAGE
+ARG GOBUILD_IMAGE=golang:1.24.2
 
-FROM ${GOBUILD_IMAGE} as builder
+FROM ${GOBUILD_IMAGE} AS builder
+# These build args are passed by buildx automatically
+ARG TARGETARCH
 
 WORKDIR /go/src/workdir
 
 COPY . .
+RUN go mod download && go mod verify
 
-RUN CGO_ENABLED=0 go build -a -o webserver main.go
-
+RUN if [ "$TARGETARCH" = "arm64" ]; then \
+      make build-arm64 ;\
+    else \
+      make build-amd64 ;\
+    fi
 
 FROM ubuntu:latest
 
